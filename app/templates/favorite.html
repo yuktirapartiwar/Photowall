@@ -1,1 +1,11 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <h1>Your Favorite Photos</h1>
+    <div class="gallery">
+        {% for photo in user.photos %}
+            <img src="{{ url_for('static', filename='images/' + photo.image_file) }}" alt="{{ photo.title }}">
+        {% endfor %}
+    </div>
+{% endblock %}
 
