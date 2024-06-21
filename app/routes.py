@@ -1,4 +1,4 @@
-from flask import render_template, url_for, flash, redirect, request
+from flask import render_template, url_for, flash, redirect, request, jsonify
 from app import app, db, bcrypt
 from app.forms import RegistrationForm, LoginForm, UploadForm, CategoryForm
 from app.models import User, Photo, Category, photo_categories
@@ -22,7 +22,8 @@ def home():
 def favorite():
     user = current_user
     photos = Photo.query.filter_by(user_id=current_user.id, is_favorite=True).all()
-    return render_template('favorite.html', user=user, photos=photos)
+    categories = Category.query.filter_by(user_id=current_user.id).all()
+    return render_template('favorite.html', user=user, photos=photos, categories=categories)
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
@@ -90,7 +91,7 @@ def upload():
             db.session.commit()
             flash('Your photo has been uploaded!', 'success')
             return redirect(url_for('home'))
-    return render_template('upload.html', title='Upload Photo', form=form)
+    return render_template('upload.html', form=form)
 
 # Function to update is_favorite attributein the database in Photo table
 @app.route("/add_favorite/<int:photo_id>", methods=['GET', 'POST'])
@@ -138,9 +139,25 @@ def create_category():
         print("Errors:", form.errors)
     return render_template('create_category.html', title='Create Category', form=form)
 
+@app.route("/add_to_category/<int:photo_id>", methods=['GET', 'POST'])
+@login_required
+def add_to_category(photo_id):
+    photo = Photo.query.get_or_404(photo_id)
+    form = CategoryForm()
+    form.categories.choices = [(category.id, category.name) for category in Category.query.filter_by(user_id=current_user.id).all()]
+    if form.validate_on_submit():
+        for category_id in form.categories.data:
+            category = Category.query.get(category_id)
+            if category:
+                db.session.execute(photo_categories.insert().values(photo_id=photo.id, category_id=category.id, user_id=current_user.id))
+        db.session.commit()
+        return redirect(request.referrer)
+    return render_template('add_to_category.html', title='Add to Category', form=form)
+
 @app.route("/category/<int:category_id>")
 @login_required
 def category_photos(category_id):
     category = Category.query.get_or_404(category_id)
     photos = Photo.query.join(Photo.categories).filter(Category.id == category_id).all()
-    return render_template('category_photos.html', title=category.name, photos=photos)
+    categories = Category.query.filter_by(user_id=current_user.id).all()
+    return render_template('category_photos.html', title=category.name, photos=photos, categories=categories)

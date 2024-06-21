@@ -1,25 +1,26 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-    <h1>Welcome to Photowall</h1>
-    <nav>
-        <ul>
-            {% for category in categories %}
-            <li><a href="{{ url_for('category_photos', category_id=category.id) }}">{{ category.name }}</a></li>
-            {% endfor %}
-        </ul>
-        <ul>
-            <li><a href="{{ url_for('create_category') }}">Create Category</a></li>
-        </ul>
-    </nav>
-    <div class="gallery">
+    <div class="row">
         {% for photo in photos %}
-            <div>
-                <img src="{{ url_for('static', filename='images/' + photo.image_file) }}" alt="{{ photo.title }}">
-                <a href="{{ url_for('add_favorite', photo_id=photo.id) }}">Favorite</a>
-                <a href="{{ url_for('delete_photo', photo_id=photo.id) }}">Delete</a>
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    <img src="{{ url_for('static', filename='images/' + photo.image_file) }}" class="card-img-top" alt="{{ photo.title }}">
+                    <div class="card-body">
+                        <div class="btn-group float-right">
+                            <a href="{{ url_for('add_favorite', photo_id=photo.id) }}" class="btn btn-sm btn-outline-secondary">
+                                <i class="fas fa-heart"></i>
+                            </a>
+                            <a href="{{ url_for('add_to_category', photo_id=photo.id) }}" class="btn btn-sm btn-outline-secondary">
+                                <i class="fas fa-plus"></i>
+                            </a>
+                            <a href="{{ url_for('delete_photo', photo_id=photo.id) }}" class="btn btn-sm btn-outline-danger">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
-            
         {% endfor %}
     </div>
 {% endblock %}

@@ -1,11 +1,29 @@
 {% extends "layout.html" %}
 
 {% block content %}
-    <h1>{{ title }}</h1>
-    <div class="gallery">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">{{ title }}</h1>
+    </div>
+
+    <div class="row">
         {% for photo in photos %}
-            <div>
-                <img src="{{ url_for('static', filename='images/' + photo.image_file) }}" alt="{{ photo.title }}">
+            <div class="col-md-4">
+                <div class="card mb-4 shadow-sm">
+                    <img class="card-img-top" src="{{ url_for('static', filename='images/' + photo.image_file) }}" alt="{{ photo.title }}">
+                    <div class="card-body">
+                        <div class="btn-group float-right">
+                            <a href="{{ url_for('add_favorite', photo_id=photo.id) }}" class="btn btn-sm btn-outline-secondary">
+                                <i class="fas fa-heart"></i>
+                            </a>
+                            <a href="{{ url_for('add_to_category', photo_id=photo.id) }}" class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-plus"></i>
+                            </a>
+                            <a href="{{ url_for('delete_photo', photo_id=photo.id) }}" class="btn btn-sm btn-outline-danger">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
         {% endfor %}
     </div>
