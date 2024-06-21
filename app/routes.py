@@ -77,7 +77,7 @@ def upload():
     if form.validate_on_submit():
         if form.photo.data:
             photo_file = save_photo(form.photo.data)
-            photo = Photo(title=form.title.data, image_file=photo_file, user_id=current_user)
+            photo = Photo(title=form.title.data, image_file=photo_file, user_id=current_user.id)
             db.session.add(photo)
             db.session.commit()
             flash('Your photo has been uploaded!', 'success')
