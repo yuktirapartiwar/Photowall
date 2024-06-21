@@ -16,7 +16,7 @@
             <ul class="navbar-nav ml-auto">
                 {% if current_user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="#" data-toggle="modal" data-target="#uploadModal">Upload</a>
+                        <a class="nav-link" href="{{ url_for('upload') }}" >Upload</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
@@ -64,35 +64,6 @@
             </main>
         </div>
     </div>
-
-    <!-- <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="uploadModalLabel">Upload Photo</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    {% include 'upload.html' %}
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-primary" id="uploadBtn">Upload</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
-
-
-    <!-- <script>
-        $(document).ready(function(){
-            $('#uploadBtn').click(function(){
-                $('#uploadModal').modal('show'); // Show the modal when the button is clicked
-            });
-        });
-    </script> -->
 
     <footer class="footer mt-auto py-3 bg-light">
         <div class="container">

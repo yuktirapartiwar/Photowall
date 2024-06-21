@@ -3,3 +3,4 @@ app/__pycache__/
 migrations
 instance
 temp.ipynb
+app/static/images/
