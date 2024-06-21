@@ -101,3 +101,12 @@ def remove_favorite(photo_id):
     photo.is_favorite = False
     db.session.commit()
     return redirect(url_for('favorite'))
+
+# Function to delete photo from database
+@app.route("/delete_photo/<int:photo_id>", methods=['GET', 'POST'])
+@login_required
+def delete_photo(photo_id):
+    photo = Photo.query.get_or_404(photo_id)
+    db.session.delete(photo)
+    db.session.commit()
+    return redirect(request.referrer)

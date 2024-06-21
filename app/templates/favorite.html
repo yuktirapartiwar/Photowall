@@ -6,7 +6,8 @@
         {% for photo in photos %}
         <div>
             <img src="{{ url_for('static', filename='images/' + photo.image_file) }}" alt="{{ photo.title }}">
-            <a href="{{ url_for('remove_favorite', photo_id=photo.id) }}">Remove</a>
+            <a href="{{ url_for('remove_favorite', photo_id=photo.id) }}">Remove from Favorites</a>
+            <a href="{{ url_for('delete_photo', photo_id=photo.id) }}">Delete</a>
         </div>
         {% endfor %}
     </div>
