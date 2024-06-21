@@ -15,11 +15,13 @@ def home():
     photos = Photo.query.all()
     return render_template('home.html', photos=photos)
 
+# Display Photos with is_favorite attribute True in Photo table
 @app.route("/favorite")
 @login_required
 def favorite():
-    user = User.query.filter_by(id=current_user.id).first()
-    return render_template('favorite.html', user=user)
+    user = current_user
+    photos = Photo.query.filter_by(is_favorite=True).all()
+    return render_template('favorite.html', user=user, photos=photos)
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
@@ -75,9 +77,27 @@ def upload():
     if form.validate_on_submit():
         if form.photo.data:
             photo_file = save_photo(form.photo.data)
-            photo = Photo(title=form.title.data, image_file=photo_file, author=current_user)
+            photo = Photo(title=form.title.data, image_file=photo_file, user_id=current_user)
             db.session.add(photo)
             db.session.commit()
             flash('Your photo has been uploaded!', 'success')
             return redirect(url_for('home'))
     return render_template('upload.html', title='Upload Photo', form=form)
+
+# Function to update is_favorite attributein the database in Photo table
+@app.route("/add_favorite/<int:photo_id>", methods=['GET', 'POST'])
+@login_required
+def add_favorite(photo_id):
+    photo = Photo.query.get_or_404(photo_id)
+    photo.is_favorite = True
+    db.session.commit()
+    return redirect(url_for('home'))
+
+# Function to remove photo from favorites
+@app.route("/remove_favorite/<int:photo_id>", methods=['GET', 'POST'])
+@login_required
+def remove_favorite(photo_id):
+    photo = Photo.query.get_or_404(photo_id)
+    photo.is_favorite = False
+    db.session.commit()
+    return redirect(url_for('favorite'))

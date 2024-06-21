@@ -3,8 +3,11 @@
 {% block content %}
     <h1>Your Favorite Photos</h1>
     <div class="gallery">
-        {% for photo in user.photos %}
+        {% for photo in photos %}
+        <div>
             <img src="{{ url_for('static', filename='images/' + photo.image_file) }}" alt="{{ photo.title }}">
+            <a href="{{ url_for('remove_favorite', photo_id=photo.id) }}">Remove</a>
+        </div>
         {% endfor %}
     </div>
 {% endblock %}

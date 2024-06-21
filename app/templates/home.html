@@ -4,7 +4,11 @@
     <h1>Welcome to Photowall</h1>
     <div class="gallery">
         {% for photo in photos %}
+        <div>
             <img src="{{ url_for('static', filename='images/' + photo.image_file) }}" alt="{{ photo.title }}">
+            <a href="{{ url_for('add_favorite', photo_id=photo.id) }}">Favorite</a>
+        </div>
+            
         {% endfor %}
     </div>
 {% endblock %}
