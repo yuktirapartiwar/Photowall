@@ -24,5 +24,22 @@ class Photo(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     is_favorite = db.Column(db.Boolean, default=False)
 
+    categories = db.relationship('Category', secondary='photo_categories', backref=db.backref('photos', lazy=True))
+
     def __repr__(self):
         return f"Photo('{self.title}', '{self.image_file}')"
+
+class Category(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), unique=True, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+    def __repr__(self):
+        return f"Category('{self.name}')"
+
+   
+photo_categories = db.Table('photo_categories',
+    db.Column('photo_id', db.Integer, db.ForeignKey('photo.id'), primary_key=True),
+    db.Column('category_id', db.Integer, db.ForeignKey('category.id'), primary_key=True),
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True)
+)

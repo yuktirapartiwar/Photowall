@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 import email_validator
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, FileField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, FileField, SelectMultipleField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from app.models import User
 
@@ -30,4 +30,9 @@ class LoginForm(FlaskForm):
 class UploadForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     photo = FileField('Photo', validators=[DataRequired()])
+    categories = SelectMultipleField('Categories', choices= [], coerce=int)
     submit = SubmitField('Upload')
+
+class CategoryForm(FlaskForm):
+    name = StringField('Name', validators=[DataRequired()])
+    submit = SubmitField('Add Category')

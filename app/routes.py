@@ -1,7 +1,7 @@
 from flask import render_template, url_for, flash, redirect, request
 from app import app, db, bcrypt
-from app.forms import RegistrationForm, LoginForm, UploadForm
-from app.models import User, Photo
+from app.forms import RegistrationForm, LoginForm, UploadForm, CategoryForm
+from app.models import User, Photo, Category, photo_categories
 from flask_login import login_user, current_user, logout_user, login_required
 import os
 import secrets
@@ -12,15 +12,16 @@ from PIL import Image
 def home():
     if not current_user.is_authenticated:
         return redirect(url_for('login'))
-    photos = Photo.query.all()
-    return render_template('home.html', photos=photos)
+    photos = Photo.query.filter_by(user_id=current_user.id).distinct(Photo.id).all()
+    categories = Category.query.filter_by(user_id=current_user.id).all()
+    return render_template('home.html', photos=photos, user=current_user, categories=categories)
 
 # Display Photos with is_favorite attribute True in Photo table
 @app.route("/favorite")
 @login_required
 def favorite():
     user = current_user
-    photos = Photo.query.filter_by(is_favorite=True).all()
+    photos = Photo.query.filter_by(user_id=current_user.id, is_favorite=True).all()
     return render_template('favorite.html', user=user, photos=photos)
 
 @app.route("/register", methods=['GET', 'POST'])
@@ -74,11 +75,18 @@ def save_photo(form_photo):
 @login_required
 def upload():
     form = UploadForm()
+    form.categories.choices = [(category.id, category.name) for category in Category.query.filter_by(user_id=current_user.id).all()]
     if form.validate_on_submit():
         if form.photo.data:
             photo_file = save_photo(form.photo.data)
             photo = Photo(title=form.title.data, image_file=photo_file, user_id=current_user.id)
             db.session.add(photo)
+
+            for category_id in form.categories.data:
+                category = Category.query.get(category_id)
+                if category:
+                    db.session.execute(photo_categories.insert().values(photo_id=photo.id, category_id=category.id, user_id=current_user.id))
+            
             db.session.commit()
             flash('Your photo has been uploaded!', 'success')
             return redirect(url_for('home'))
@@ -110,3 +118,29 @@ def delete_photo(photo_id):
     db.session.delete(photo)
     db.session.commit()
     return redirect(request.referrer)
+
+@app.route("/create_category", methods=['GET', 'POST'])
+@login_required
+def create_category():
+    form = CategoryForm()
+    if form.validate_on_submit():
+        print("Form validated successfully")
+        print("Form data:", form.data)
+
+        category = Category(name=form.name.data, user_id=current_user.id)
+        db.session.add(category)
+        db.session.commit()
+        print("Category ID:", category.id)  # Check if the category is created with an ID
+        
+        return redirect(url_for('home'))
+    else:
+        print("Form validation failed")
+        print("Errors:", form.errors)
+    return render_template('create_category.html', title='Create Category', form=form)
+
+@app.route("/category/<int:category_id>")
+@login_required
+def category_photos(category_id):
+    category = Category.query.get_or_404(category_id)
+    photos = Photo.query.join(Photo.categories).filter(Category.id == category_id).all()
+    return render_template('category_photos.html', title=category.name, photos=photos)
