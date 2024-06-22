@@ -15,7 +15,7 @@
                             <a href="{{ url_for('add_favorite', photo_id=photo.id) }}" class="btn btn-sm btn-outline-secondary">
                                 <i class="fas fa-heart"></i>
                             </a>
-                            <a href="{{ url_for('add_to_category', photo_id=photo.id) }}" class="btn btn-sm btn-outline-primary">
+                            <a href="{{ url_for('add_category_to_photo', photo_id=photo.id) }}" class="btn btn-sm btn-outline-primary">
                                 <i class="fas fa-plus"></i>
                             </a>
                             <a href="{{ url_for('delete_photo', photo_id=photo.id) }}" class="btn btn-sm btn-outline-danger">

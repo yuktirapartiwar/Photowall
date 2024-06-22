@@ -1,6 +1,6 @@
 from flask import render_template, url_for, flash, redirect, request, jsonify
 from app import app, db, bcrypt
-from app.forms import RegistrationForm, LoginForm, UploadForm, CategoryForm
+from app.forms import RegistrationForm, LoginForm, UploadForm, CategoryForm, AddCategoryToPhotoForm
 from app.models import User, Photo, Category, photo_categories
 from flask_login import login_user, current_user, logout_user, login_required
 import os
@@ -141,18 +141,20 @@ def create_category():
 
 @app.route("/add_to_category/<int:photo_id>", methods=['GET', 'POST'])
 @login_required
-def add_to_category(photo_id):
+def add_category_to_photo(photo_id):
     photo = Photo.query.get_or_404(photo_id)
-    form = CategoryForm()
+    form = AddCategoryToPhotoForm()
     form.categories.choices = [(category.id, category.name) for category in Category.query.filter_by(user_id=current_user.id).all()]
     if form.validate_on_submit():
-        for category_id in form.categories.data:
+        selected_categories = form.categories.data
+        for category_id in selected_categories:
             category = Category.query.get(category_id)
             if category:
-                db.session.execute(photo_categories.insert().values(photo_id=photo.id, category_id=category.id, user_id=current_user.id))
+                if not db.session.query(photo_categories).filter_by(photo_id=photo.id, category_id=category.id).first():
+                    db.session.execute(photo_categories.insert().values(photo_id=photo.id, category_id=category.id, user_id=current_user.id))
         db.session.commit()
-        return redirect(request.referrer)
-    return render_template('add_to_category.html', title='Add to Category', form=form)
+        return redirect(url_for('home'))
+    return render_template('add_category_to_photo.html', title='Add to Category', form=form, photo=photo)
 
 @app.route("/category/<int:category_id>")
 @login_required
