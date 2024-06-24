@@ -65,9 +65,7 @@ def save_photo(form_photo):
     photo_fn = random_hex + f_ext
     photo_path = os.path.join(app.root_path, 'static/images', photo_fn)
     
-    output_size = (250, 250)
     i = Image.open(form_photo)
-    i.thumbnail(output_size)
     i.save(photo_path)
 
     return photo_fn

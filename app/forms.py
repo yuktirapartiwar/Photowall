@@ -27,20 +27,20 @@ class LoginForm(FlaskForm):
     remember = BooleanField('Remember Me')
     submit = SubmitField('Login')
 
+class MultiCheckboxField(SelectMultipleField):
+    widget = widgets.ListWidget(prefix_label=False)
+    option_widget = widgets.CheckboxInput()
+
 class UploadForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     photo = FileField('Photo', validators=[DataRequired()])
-    categories = SelectMultipleField('Categories', choices= [], coerce=int)
+    categories = MultiCheckboxField('Categories', choices= [], coerce=int)
     submit = SubmitField('Upload')
 
 # Form for creating categories
 class CategoryForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired()])
     submit = SubmitField('Add Category')
-
-class MultiCheckboxField(SelectMultipleField):
-    widget = widgets.ListWidget(prefix_label=False)
-    option_widget = widgets.CheckboxInput()
 
 # Form for adding categories to photos
 class AddCategoryToPhotoForm(FlaskForm):

@@ -1,15 +1,28 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-    <h1>Create Category</h1>
-    <form action="{{ url_for('create_category') }}" method="POST">
-        {{ form.hidden_tag() }}
-        <div>
-            {{ form.name.label }}
-            {{ form.name(class='form-control') }}
-            {{ form.csrf_token }}
+<div class="create_category">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Create Category</h3>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{{ url_for('create_category') }}">
+                        {{ form.hidden_tag() }}
+                        <div class="form-group">
+                            {{ form.name.label(class="form-control-label") }}
+                            {{ form.name(class="form-control") }}
+                            {{ form.csrf_token }}
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">Create Category</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-        
-        <button type="submit">Create Category</button>
-    </form>
+    </div>
+</div>
 {% endblock %}
