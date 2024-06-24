@@ -2,6 +2,8 @@
 
 Photowall is a web application that enables users to create profiles, upload and manage photos, categorize them, and save favorite photos. Built using Flask and SQLAlchemy, this app provides a clean, minimalist interface for organizing images. Whether you're an avid photographer or just someone who loves to keep their photos organized, Photowall offers an intuitive platform to manage your photo collections.
 
+![Photo Gallery](https://github.com/yuktirapartiwar/Photowall/blob/main/app/static/Screenshots/Homepage.png)
+
 ## Skills and Technologies Used: 
 **Frontend:**
 
@@ -49,16 +51,35 @@ Photowall is a web application that enables users to create profiles, upload and
 	
  **User Login:**
  
+ ![User Login](https://github.com/yuktirapartiwar/Photowall/blob/main/app/static/Screenshots/Login_Page.png)
+
+ 
  **User Signup:**
+ 
+ ![User Signup](https://github.com/yuktirapartiwar/Photowall/blob/main/app/static/Screenshots/Register_Page.png)
+
  
  **Photo Gallery:**
  
+ ![Photo Gallery](https://github.com/yuktirapartiwar/Photowall/blob/main/app/static/Screenshots/Homepage.png)
+
+ 
  **Upload Photo:**
+ 
+ ![Upload Photo](https://github.com/yuktirapartiwar/Photowall/blob/main/app/static/Screenshots/Upload_Photo_Page.png)
+
  
  **Favourites Page:**
  
+ ![Favourites](https://github.com/yuktirapartiwar/Photowall/blob/main/app/static/Screenshots/Favorite_Page.png)
+
+ 
  **Create Categories:**
  
+ ![Create Categories](https://github.com/yuktirapartiwar/Photowall/blob/main/app/static/Screenshots/Create_Category_Page.png)
+ 
  **Category Page:**
+ ![Category Page](https://github.com/yuktirapartiwar/Photowall/blob/main/app/static/Screenshots/Category_Page.png)
  
  **Add Categories to Photo:**
+ ![Add Categories to Photo](https://github.com/yuktirapartiwar/Photowall/blob/main/app/static/Screenshots/Add_Categories_To_Photo_Page.png)
